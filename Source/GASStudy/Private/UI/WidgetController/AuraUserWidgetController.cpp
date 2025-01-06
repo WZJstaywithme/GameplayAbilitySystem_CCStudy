@@ -12,3 +12,8 @@ void UAuraUserWidgetController::SetWidgetControllerParams(const FWidgetControlle
 	AbilitySystemComponent = WCParams.AbilitySystemComponent;
 	AttributeSet = WCParams.AttributeSet;
 }
+
+void UAuraUserWidgetController::BindCallbackToDependencies()
+{
+	
+}

@@ -18,10 +18,38 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 	return AbilitySystem;
 }
 
+int32 AAuraCharacterBase::GetPlayerLevel()
+{
+	return ICombatInterface::GetPlayerLevel();
+}
+
 // Called when the game starts or when spawned
 void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AAuraCharacterBase::InitAbilityActorInfo()
+{
+}
+
+void AAuraCharacterBase::InitializeDefaultAttributes() const
+{
+	ApplyEffectToSelf(DefaultPrimaryAttributes,1.f);
+	ApplyEffectToSelf(DefaultSecondaryAttributes,1.f);
+	ApplyEffectToSelf(DefaultVitalAttributes,1.f);
+}
+
+
+void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const\
+{
+	check(IsValid(GetAbilitySystemComponent()));
+	check(DefaultPrimaryAttributes);
+
+	FGameplayEffectContextHandle GameplayEffectContextHandle = GetAbilitySystemComponent() -> MakeEffectContext();
+	GameplayEffectContextHandle.AddSourceObject(this);
+	const FGameplayEffectSpecHandle GameplayEffectSpecHandle = GetAbilitySystemComponent() -> MakeOutgoingSpec(GameplayEffectClass,Level,GameplayEffectContextHandle);
+	GetAbilitySystemComponent() -> ApplyGameplayEffectSpecToTarget(*GameplayEffectSpecHandle.Data.Get(),GetAbilitySystemComponent());
 }
 
